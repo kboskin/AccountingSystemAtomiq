@@ -1,0 +1,3 @@
+rootProject.name = 'AccountingSystemAtomiq'
+
+include ':app'
