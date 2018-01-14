@@ -13,9 +13,11 @@ import {
 export default class LoginForm extends Component {
   render() {
     return (
-      <View style={styles.container}>
+
       <KeyboardAvoidingView
-      behavior="padding">
+      behavior="padding"
+      style={styles.container}>
+
         <TextInput
            placeholder = "ваш пароль"
            placeholderTextColor = '#fff'
@@ -24,11 +26,17 @@ export default class LoginForm extends Component {
            secureTextEntry>
          </TextInput>
 
-        <TouchableOpacity style= {styles.buttonContainer}>
-          <Text  style= {styles.buttonText}>Войти</Text>
+        <TouchableOpacity
+          style= {styles.buttonContainer}
+          onPress = {() =>
+            this
+              .props
+              .navigation
+              .navigate('MainScreen')}>
+            <Text  style= {styles.buttonText}>Войти</Text>
         </TouchableOpacity>
     </KeyboardAvoidingView>
-  </View>
+
 
     );
   }
@@ -50,6 +58,7 @@ const styles = StyleSheet.create({
     paddingVertical : 10,
     alignItems: 'center',
     justifyContent: 'center',
+    marginBottom : 30
   },
   buttonText : {
     textAlign : 'center',

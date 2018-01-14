@@ -8,6 +8,9 @@ import {
 import LoginForm from './LoginForm'
 
 export default class Login extends React.Component {
+  static navigationOptions = { title: 'Welcome', header: null };
+
+
   render() {
     return (
       <View style={styles.container}>
@@ -21,7 +24,7 @@ export default class Login extends React.Component {
           </View>
 
           <View style = {styles.formContainer}>
-            <LoginForm/>
+            <LoginForm navigation={this.props.navigation}/>
           </View>
       </View>
     );
