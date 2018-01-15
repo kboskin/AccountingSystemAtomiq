@@ -7,7 +7,8 @@ import {
     BackHandler,
     Alert,
     Platform,
-    ToastAndroid
+    ToastAndroid,
+    AppState
 } from 'react-native';
 import { NavigationActions } from 'react-navigation';
 
@@ -44,6 +45,7 @@ export default class MainScreen extends Component {
         super(props);
         this.state = {
             doubleBackToExitPressedOnce: false,
+            appState: AppState.currentState
         }
     }
 
@@ -58,22 +60,26 @@ export default class MainScreen extends Component {
         //   NavigationActions.navigate({ routeName: 'MainScreen'})
         // ]
         // });
+
+        AppState.addEventListener('change', this.handleAppStateChange);
     }
 
     componentWillUnmount() {
         BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
+        AppState.removeEventListener('change', this.handleAppStateChange);
+    }
+
+    handleAppStateChange = (nextAppState) => {
+      if (this.state.appState.match(/inactive|background/) && nextAppState === 'active') {
+        this.setState({doubleBackToExitPressedOnce: false})
+      }
+    this.setState({appState: nextAppState});
     }
 
     onButtonPress = () => {
         BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
         // then navigate
         // navigate('NewScreen');
-    }
-
-    changeDoubleBackToExit() {
-        this.setState({
-            doubleBackToExitPressedOnce: false
-        });
     }
 
     handleBackButton = () => {
@@ -119,9 +125,11 @@ export default class MainScreen extends Component {
                 this.setState({
                     doubleBackToExitPressedOnce: true
                 });
-                setTimeout(() => {
-                    this.changeDoubleBackToExit();
-                }, 1000);
+                // setTimeout(() => {
+                //   this.setState({
+                //       doubleBackToExitPressedOnce: false
+                //   });
+                // }, 1000);
                 return true;
             }
 
