@@ -11,6 +11,7 @@ import {
     AppState
 } from 'react-native';
 import { NavigationActions } from 'react-navigation';
+import Drawer from 'react-native-drawer'
 
 export default class MainScreen extends Component {
 
@@ -18,34 +19,12 @@ export default class MainScreen extends Component {
         title: 'Меню'
     }
 
-    // constructor(props) {
-    // super(props);
-    // this.handleBack = this.handleBack.bind(this);
-    // }
-    //
-    // componentDidMount() {
-    //     console.log("state", this.props.navigation);
-    //     // using this it wil jsut clean the route
-    //     // this.props.navigation.dispatch(resetAction);
-    //     // but this will just close an application
-    //     BackHandler.addEventListener('hardwareBackPress', () => { return this.handleBack.bind(this)() });
-    //   }
-    //   componentWillUnmount() {
-    //     BackHandler.removeEventListener('hardwareBackPress')
-    //   }
-    //
-    //   handleBack() {
-    //     if(action.type === 'Navigation/BACK' && state.index === 0){
-    //             BackHandler.exitApp()
-    //     }
-    //   }
-
-
     constructor(props) {
         super(props);
         this.state = {
             doubleBackToExitPressedOnce: false,
-            appState: AppState.currentState
+            appState: AppState.currentState,
+            menuOpen: false
         }
     }
 
@@ -87,62 +66,88 @@ export default class MainScreen extends Component {
             BackHandler.exitApp();
         }
         //ToastAndroid.show('Press back again to exit', ToastAndroid.SHORT);
+        this.handleNavigateBackUi();
 
-        if (Platform.OS === 'ios') {
-            Alert.alert(
-                'Выйти из приложения',
-                'Вы действительно желаете покинуть приложение? Все несохраненные данные будут удалены', [{
-                        text: 'Выйти',
-                        onPress: () => {
-                            console.log('Выйти pressed')
-                            this.setState({
-                                doubleBackToExitPressedOnce: true
-                            });
-                            BackHandler.exitApp();
-                            return true;
-                        }
-                    },
-                    {
-                        text: 'Остаться',
-                        onPress: () => {
-                            console.log('Остаться pressed');
-                            this.setState({
-                                doubleBackToExitPressedOnce: false
-                            });
-                        },
-                    }
-                ], {
-                    cancelable: false
-                }
-            )
-            return true;
-        } else {
-            if (this.state.doubleBackToExitPressedOnce) {
-                this.state.doubleBackToExitPressedOnce.setState
-                BackHandler.exitApp();
-            } else {
-                ToastAndroid.show('Нажмите еще раз для выхода', ToastAndroid.SHORT);
-                this.setState({
-                    doubleBackToExitPressedOnce: true
-                });
-                // setTimeout(() => {
-                //   this.setState({
-                //       doubleBackToExitPressedOnce: false
-                //   });
-                // }, 1000);
-                return true;
-            }
 
+
+    }
+    handleNavigateBackUi() {
+      if (Platform.OS === 'ios') {
+          Alert.alert(
+              'Выйти из приложения',
+              'Вы действительно желаете покинуть приложение? Все несохраненные данные будут удалены', [{
+                      text: 'Выйти',
+                      onPress: () => {
+                          console.log('Выйти pressed')
+                          this.setState({
+                              doubleBackToExitPressedOnce: true
+                          });
+                          BackHandler.exitApp();
+                          return true;
+                      }
+                  },
+                  {
+                      text: 'Остаться',
+                      onPress: () => {
+                          console.log('Остаться pressed');
+                          this.setState({
+                              doubleBackToExitPressedOnce: false
+                          });
+                      },
+                  }
+              ], {
+                  cancelable: false
+              }
+          )
+          return true;
+      } else {
+          if (this.state.doubleBackToExitPressedOnce) {
+              this.state.doubleBackToExitPressedOnce.setState
+              BackHandler.exitApp();
+          } else {
+              ToastAndroid.show('Нажмите еще раз для выхода', ToastAndroid.SHORT);
+              this.setState({
+                  doubleBackToExitPressedOnce: true
+              });
+              return true;
+          }
+      }
+    }
+    closeControlPanel = () => {
+      this._drawer.close()
+    };
+    openControlPanel = () => {
+      this._drawer.open()
+    };
+    toggleDrawer() {
+      this.state.toggled ? this._drawer.close() : this._drawer.open();
+    }
+
+ render() {
+   return (
+     <Drawer ref={(ref)=> this._drawer = ref}
+        content={
+          <View style={{backgroundColor: "rgba(255, 255, 255, 0.5)", height: 1000}}>
+            <Text>Hello</Text>
+          </View>
         }
+        type="displace"
+        openDrawerOffset={0.2}
+        panCloseMask={0.2}
+        closedDrawerOffset={-3}
+        styles={drawerStyles}
+        panOpenMask={0.80}
+        captureGestures={true}
+        tapToClose={true}>
+       <Text>HelloWorld</Text>
+     </Drawer>
+   );
+ }
+}
 
-    }
-
-    render() {
-        return ( <View style = {styles.container}>
-                    <Text> I 'm the MainScreen component</Text>
-                </View>
-        );
-    }
+const drawerStyles = {
+  drawer: { shadowColor: '#fff', shadowOpacity: 0.8, shadowRadius: 3},
+  main: {paddingLeft: 3},
 }
 
 const styles = StyleSheet.create({

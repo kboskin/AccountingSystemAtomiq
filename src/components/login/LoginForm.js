@@ -7,10 +7,21 @@ import {
   StyleSheet,
   TextInput,
   TouchableOpacity,
-  KeyboardAvoidingView
+  KeyboardAvoidingView,
+  AsyncStorage,
+  ToastAndroid
 } from 'react-native';
 
 export default class LoginForm extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      text: ''
+    };
+
+  }
+
   render() {
     return (
 
@@ -23,16 +34,15 @@ export default class LoginForm extends Component {
            placeholderTextColor = '#fff'
            underlineColorAndroid = {'transparent'}
            style = {styles.input}
-           secureTextEntry>
+           secureTextEntry
+           onChangeText={(text) => {this.setState({text})}}>
          </TextInput>
 
         <TouchableOpacity
           style= {styles.buttonContainer}
           onPress = {() =>
-            this
-              .props
-              .navigation
-              .navigate('MainScreen')}>
+            this.navigateToMainPage()
+            }>
             <Text  style= {styles.buttonText}>Войти</Text>
         </TouchableOpacity>
     </KeyboardAvoidingView>
@@ -40,8 +50,20 @@ export default class LoginForm extends Component {
 
     );
   }
-}
 
+  navigateToMainPage()
+  {
+    this.fetchDataFromServer()
+    this
+      .props
+      .navigation
+      .navigate('MainScreen');
+  }
+  fetchDataFromServer()
+  {
+    ToastAndroid.show(this.state.text, ToastAndroid.SHORT)
+  }
+}
 const styles = StyleSheet.create({
   container: {
     padding: 20,
