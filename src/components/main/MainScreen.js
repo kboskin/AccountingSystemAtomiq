@@ -8,7 +8,10 @@ import {
     Alert,
     Platform,
     ToastAndroid,
-    AppState
+    AppState,
+    Image,
+    Dimensions,
+    TouchableOpacity
 } from 'react-native';
 import { NavigationActions } from 'react-navigation';
 import Drawer from 'react-native-drawer'
@@ -16,15 +19,23 @@ import Drawer from 'react-native-drawer'
 export default class MainScreen extends Component {
 
     static navigationOptions = {
-        title: 'Меню'
+        title: 'Меню',
+        header : null
     }
 
     constructor(props) {
         super(props);
+
+        // variable to get defaults of screens
+        win = Dimensions.get('window');
+
         this.state = {
             doubleBackToExitPressedOnce: false,
             appState: AppState.currentState,
-            menuOpen: false
+            menuOpen: false,
+            OrientationStatus : '',
+            Screen_Height : win.width, // default value for screens
+            Screen_Width : win.height, // default value for screens
         }
     }
 
@@ -41,6 +52,8 @@ export default class MainScreen extends Component {
         // });
 
         AppState.addEventListener('change', this.handleAppStateChange);
+
+        this.DetectOrientation();
     }
 
     componentWillUnmount() {
@@ -66,52 +79,46 @@ export default class MainScreen extends Component {
             BackHandler.exitApp();
         }
         //ToastAndroid.show('Press back again to exit', ToastAndroid.SHORT);
-        this.handleNavigateBackUi();
-
-
-
-    }
-    handleNavigateBackUi() {
-      if (Platform.OS === 'ios') {
-          Alert.alert(
-              'Выйти из приложения',
-              'Вы действительно желаете покинуть приложение? Все несохраненные данные будут удалены', [{
-                      text: 'Выйти',
-                      onPress: () => {
-                          console.log('Выйти pressed')
-                          this.setState({
-                              doubleBackToExitPressedOnce: true
-                          });
-                          BackHandler.exitApp();
-                          return true;
-                      }
-                  },
-                  {
-                      text: 'Остаться',
-                      onPress: () => {
-                          console.log('Остаться pressed');
-                          this.setState({
-                              doubleBackToExitPressedOnce: false
-                          });
-                      },
-                  }
-              ], {
-                  cancelable: false
-              }
-          )
-          return true;
-      } else {
-          if (this.state.doubleBackToExitPressedOnce) {
-              this.state.doubleBackToExitPressedOnce.setState
-              BackHandler.exitApp();
-          } else {
-              ToastAndroid.show('Нажмите еще раз для выхода', ToastAndroid.SHORT);
-              this.setState({
-                  doubleBackToExitPressedOnce: true
-              });
-              return true;
-          }
-      }
+        if (Platform.OS === 'ios') {
+            Alert.alert(
+                'Выйти из приложения',
+                'Вы действительно желаете покинуть приложение? Все несохраненные данные будут удалены', [{
+                        text: 'Выйти',
+                        onPress: () => {
+                            console.log('Выйти pressed')
+                            this.setState({
+                                doubleBackToExitPressedOnce: true
+                            });
+                            BackHandler.exitApp();
+                            return true;
+                        }
+                    },
+                    {
+                        text: 'Остаться',
+                        onPress: () => {
+                            console.log('Остаться pressed');
+                            this.setState({
+                                doubleBackToExitPressedOnce: false
+                            });
+                        },
+                    }
+                ], {
+                    cancelable: false
+                }
+            )
+            return true;
+        } else {
+            if (this.state.doubleBackToExitPressedOnce) {
+                this.state.doubleBackToExitPressedOnce.setState
+                BackHandler.exitApp();
+            } else {
+                ToastAndroid.show('Нажмите еще раз для выхода', ToastAndroid.SHORT);
+                this.setState({
+                    doubleBackToExitPressedOnce: true
+                });
+                return true;
+            }
+        }
     }
     closeControlPanel = () => {
       this._drawer.close()
@@ -123,7 +130,41 @@ export default class MainScreen extends Component {
       this.state.toggled ? this._drawer.close() : this._drawer.open();
     }
 
+    DetectOrientation(){
+    if(this.state.Screen_Width > this.state.Screen_Height)
+    {
+      // Write Your own code here, which you want to execute on Landscape Mode.
+
+        this.setState({
+        OrientationStatus : 'Landscape Mode'
+        });
+        console.log("w is " + this.state.Screen_Width)
+        console.log("h is " + this.state.Screen_Height)
+    }
+    else{
+      // Write Your own code here, which you want to execute on Portrait Mode.
+        this.setState({
+        OrientationStatus : 'Portrait Mode'
+        });
+        console.log("w is " + this.state.Screen_Width)
+        console.log("h is " + this.state.Screen_Height)
+    }
+
+  }
+
  render() {
+
+   // this variable to make styles changing dynamically
+   backImgStyle = {
+     backgroundImage: {
+       flex : 1,
+       alignSelf: 'stretch',
+       flexDirection: 'row',
+       flexWrap: 'wrap',
+       width : this.state.Screen_Width,
+       height : this.state.Screen_Height
+   }
+ }
    return (
      <Drawer ref={(ref)=> this._drawer = ref}
         content={
@@ -139,7 +180,13 @@ export default class MainScreen extends Component {
         panOpenMask={0.80}
         captureGestures={true}
         tapToClose={true}>
-       <Text>HelloWorld</Text>
+          <Image
+            onLayout={(event) => this.setState({
+                  Screen_Width : event.nativeEvent.layout.width,
+                  Screen_Height : event.nativeEvent.layout.height
+                  }, () => this.DetectOrientation())}
+          style={backImgStyle.backgroundImage}
+          source={require('../../../images/coffee.jpg')}/>
      </Drawer>
    );
  }
