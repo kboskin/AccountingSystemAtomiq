@@ -3,7 +3,8 @@ import {
   View,
   Text,
   StyleSheet,
-  Image
+  Image,
+  StatusBar
 } from 'react-native';
 import LoginForm from './LoginForm'
 
@@ -15,6 +16,7 @@ export default class Login extends React.Component {
     return (
       <View style={styles.container}>
           <View style={styles.logoContainer}>
+            <StatusBar backgroundColor="#1e89db"/>
             <Image
               source = {require('../../../images/logo.png')}
               style = {styles.logo}>
@@ -34,7 +36,7 @@ export default class Login extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex : 1,
-    backgroundColor : '#3493db'
+    backgroundColor : '#1e89db'
   },
   logoContainer : {
     flexGrow : 1,

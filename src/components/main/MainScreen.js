@@ -11,7 +11,8 @@ import {
     AppState,
     Image,
     Dimensions,
-    TouchableOpacity
+    TouchableOpacity,
+    StatusBar
 } from 'react-native';
 import { NavigationActions } from 'react-navigation';
 import Drawer from 'react-native-drawer'
@@ -26,16 +27,10 @@ export default class MainScreen extends Component {
     constructor(props) {
         super(props);
 
-        // variable to get defaults of screens
-        win = Dimensions.get('window');
-
         this.state = {
             doubleBackToExitPressedOnce: false,
             appState: AppState.currentState,
             menuOpen: false,
-            OrientationStatus : '',
-            Screen_Height : win.width, // default value for screens
-            Screen_Width : win.height, // default value for screens
         }
     }
 
@@ -52,8 +47,6 @@ export default class MainScreen extends Component {
         // });
 
         AppState.addEventListener('change', this.handleAppStateChange);
-
-        this.DetectOrientation();
     }
 
     componentWillUnmount() {
@@ -130,45 +123,12 @@ export default class MainScreen extends Component {
       this.state.toggled ? this._drawer.close() : this._drawer.open();
     }
 
-    DetectOrientation(){
-    if(this.state.Screen_Width > this.state.Screen_Height)
-    {
-      // Write Your own code here, which you want to execute on Landscape Mode.
-
-        this.setState({
-        OrientationStatus : 'Landscape Mode'
-        });
-        console.log("w is " + this.state.Screen_Width)
-        console.log("h is " + this.state.Screen_Height)
-    }
-    else{
-      // Write Your own code here, which you want to execute on Portrait Mode.
-        this.setState({
-        OrientationStatus : 'Portrait Mode'
-        });
-        console.log("w is " + this.state.Screen_Width)
-        console.log("h is " + this.state.Screen_Height)
-    }
-
-  }
-
  render() {
-
-   // this variable to make styles changing dynamically
-   backImgStyle = {
-     backgroundImage: {
-       flex : 1,
-       alignSelf: 'stretch',
-       flexDirection: 'row',
-       flexWrap: 'wrap',
-       width : this.state.Screen_Width,
-       height : this.state.Screen_Height
-   }
- }
    return (
      <Drawer ref={(ref)=> this._drawer = ref}
         content={
           <View style={{backgroundColor: "rgba(255, 255, 255, 0.5)", height: 1000}}>
+            <StatusBar hidden = {true}/>
             <Text>Hello</Text>
           </View>
         }
@@ -181,11 +141,8 @@ export default class MainScreen extends Component {
         captureGestures={true}
         tapToClose={true}>
           <Image
-            onLayout={(event) => this.setState({
-                  Screen_Width : event.nativeEvent.layout.width,
-                  Screen_Height : event.nativeEvent.layout.height
-                  }, () => this.DetectOrientation())}
-          style={backImgStyle.backgroundImage}
+            resizeMode={'cover'}
+            style={{ width: '100%', height: '100%' }}
           source={require('../../../images/coffee.jpg')}/>
      </Drawer>
    );
