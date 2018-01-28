@@ -15,7 +15,8 @@ import {
     StatusBar
 } from 'react-native';
 import { NavigationActions } from 'react-navigation';
-import Drawer from 'react-native-drawer'
+import Drawer from 'react-native-drawer';
+import Orientation from 'react-native-orientation-locker';
 
 export default class MainScreen extends Component {
 
@@ -45,7 +46,8 @@ export default class MainScreen extends Component {
         //   NavigationActions.navigate({ routeName: 'MainScreen'})
         // ]
         // });
-
+        // lock to lockToPortrait orientation
+        Orientation.lockToLandscape();
         AppState.addEventListener('change', this.handleAppStateChange);
     }
 

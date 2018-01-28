@@ -8,9 +8,14 @@
  */
 
 #import <UIKit/UIKit.h>
+#import "Orientation.h" // <--- import
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
+@implementation AppDelegate
+- (UIInterfaceOrientationMask)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window {
+  return [Orientation getOrientation];
+}
 @property (nonatomic, strong) UIWindow *window;
 
 @end
