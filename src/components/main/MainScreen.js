@@ -143,7 +143,7 @@ export default class MainScreen extends Component {
           <Image
             resizeMode={'cover'}
             style={{ width: '100%', height: '100%' }}
-          source={require('../../../images/coffee.jpg')}/>
+            source={require('../../../images/coffee.jpg')}/>
      </Drawer>
    );
  }
