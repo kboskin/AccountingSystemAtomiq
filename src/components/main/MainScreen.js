@@ -9,7 +9,7 @@ import {
     Platform,
     ToastAndroid,
     AppState,
-    Image,
+    ImageBackground,
     Dimensions,
     TouchableOpacity,
     StatusBar
@@ -17,6 +17,7 @@ import {
 import { NavigationActions } from 'react-navigation';
 import Drawer from 'react-native-drawer';
 import Orientation from 'react-native-orientation-locker';
+import MainGrid from './MainGrid'
 
 export default class MainScreen extends Component {
 
@@ -129,23 +130,25 @@ export default class MainScreen extends Component {
    return (
      <Drawer ref={(ref)=> this._drawer = ref}
         content={
-          <View style={{backgroundColor: "rgba(255, 255, 255, 0.5)", height: 1000}}>
+          <View style={{backgroundColor: "rgba(255, 255, 255, 0.7)", height: 1000}}>
             <StatusBar hidden = {true}/>
             <Text>Hello</Text>
           </View>
         }
-        type="displace"
+        type="overlay"
         openDrawerOffset={0.2}
         panCloseMask={0.2}
         closedDrawerOffset={-3}
         styles={drawerStyles}
-        panOpenMask={0.80}
+        panOpenMask={0.20}
         captureGestures={true}
         tapToClose={true}>
-          <Image
+          <ImageBackground
             resizeMode={'cover'}
             style={{ width: '100%', height: '100%' }}
-            source={require('../../../images/coffee.jpg')}/>
+            source={require('../../../images/coffee.jpg')}>
+              <MainGrid/>
+          </ImageBackground>
      </Drawer>
    );
  }
