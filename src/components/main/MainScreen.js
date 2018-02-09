@@ -16,7 +16,7 @@ import {
 } from 'react-native';
 import { NavigationActions } from 'react-navigation';
 import Drawer from 'react-native-drawer';
-import Orientation from 'react-native-orientation-locker';
+import Orientation from 'react-native-orientation';
 import MainGrid from './MainGrid'
 
 export default class MainScreen extends Component {
@@ -37,6 +37,8 @@ export default class MainScreen extends Component {
     }
 
     componentDidMount() {
+        Orientation.lockToLandscape();
+
         BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
         // theese lines should log out user later
         // this.props.navigation.dispatch(resetAction)
@@ -48,7 +50,6 @@ export default class MainScreen extends Component {
         // ]
         // });
         // lock to lockToPortrait orientation
-        Orientation.lockToLandscape();
         AppState.addEventListener('change', this.handleAppStateChange);
     }
 
@@ -137,10 +138,10 @@ export default class MainScreen extends Component {
         }
         type="overlay"
         openDrawerOffset={0.2}
-        panCloseMask={0.2}
+        panCloseMask={0.4}
         closedDrawerOffset={-3}
         styles={drawerStyles}
-        panOpenMask={0.20}
+        panOpenMask={0.05}
         captureGestures={true}
         tapToClose={true}>
           <ImageBackground
