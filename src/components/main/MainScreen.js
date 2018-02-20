@@ -12,6 +12,8 @@ import {
     ImageBackground,
     Dimensions,
     TouchableOpacity,
+    StatusBarб,
+    DrawerLayoutAndroid,
     StatusBar
 } from 'react-native';
 import { NavigationActions } from 'react-navigation';
@@ -128,29 +130,28 @@ export default class MainScreen extends Component {
     }
 
  render() {
+   var navigationView = (
+     <View style={{flex: 1, backgroundColor: 'rgba(255, 255, 255, 0.3)', flexDirection : 'row'}}>
+       <StatusBar hidden = {true}/>
+       <Text style={{margin: 10, fontSize: 15, textAlign: 'left'}}>I'm in the Drawer!</Text>
+       <Text style={{margin: 10, fontSize: 15, textAlign: 'right'}}>x35</Text>
+     </View>
+   )
+   var lotsArray = [];
+   lotsArray.push(navigationView)
    return (
-     <Drawer ref={(ref)=> this._drawer = ref}
-        content={
-          <View style={{backgroundColor: "rgba(255, 255, 255, 0.7)", height: 1000}}>
-            <StatusBar hidden = {true}/>
-            <Text>Hello</Text>
-          </View>
-        }
-        type="overlay"
-        openDrawerOffset={0.2}
-        panCloseMask={0.4}
-        closedDrawerOffset={-3}
-        styles={drawerStyles}
-        panOpenMask={0.05}
-        captureGestures={true}
-        tapToClose={true}>
+     <DrawerLayoutAndroid
+        drawerBackgroundColor="rgba(255, 255, 255, 0.3)"
+        drawerPosition={DrawerLayoutAndroid.positions.Left}
+        drawerWidth={Dimensions.get('window').width*0.75}
+        renderNavigationView={() => lotsArray}>
           <ImageBackground
             resizeMode={'cover'}
             style={{ width: '100%', height: '100%' }}
             source={require('../../../images/coffee.jpg')}>
               <MainGrid/>
           </ImageBackground>
-     </Drawer>
+     </DrawerLayoutAndroid>
    );
  }
 }
