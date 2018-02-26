@@ -12,14 +12,16 @@ import {
     ImageBackground,
     Dimensions,
     TouchableOpacity,
-    StatusBarб,
     DrawerLayoutAndroid,
-    StatusBar
+    StatusBar,
+    Button,
+    Image
 } from 'react-native';
 import { NavigationActions } from 'react-navigation';
 import Drawer from 'react-native-drawer';
 import Orientation from 'react-native-orientation';
 import MainGrid from './MainGrid'
+import NavigationItem from './NavigationItem'
 
 export default class MainScreen extends Component {
 
@@ -35,6 +37,7 @@ export default class MainScreen extends Component {
             doubleBackToExitPressedOnce: false,
             appState: AppState.currentState,
             menuOpen: false,
+            count : 0
         }
     }
 
@@ -130,21 +133,21 @@ export default class MainScreen extends Component {
     }
 
  render() {
-   var navigationView = (
-     <View style={{flex: 1, backgroundColor: 'rgba(255, 255, 255, 0.3)', flexDirection : 'row'}}>
-       <StatusBar hidden = {true}/>
-       <Text style={{margin: 10, fontSize: 15, textAlign: 'left'}}>I'm in the Drawer!</Text>
-       <Text style={{margin: 10, fontSize: 15, textAlign: 'right'}}>x35</Text>
-     </View>
+   var navigationView = ((name, price, i) => {
+        return(
+          <NavigationItem name={name} price={price} key={i} id={i}/>
+        )
+     }
    )
-   var lotsArray = [];
-   lotsArray.push(navigationView)
+   var itemsArray = [];
+   itemsArray.push(navigationView("Fucking item NO1", "35", 1))
+   itemsArray.push(navigationView("Fucking item NO2", "25", 2))
    return (
      <DrawerLayoutAndroid
         drawerBackgroundColor="rgba(255, 255, 255, 0.3)"
         drawerPosition={DrawerLayoutAndroid.positions.Left}
-        drawerWidth={Dimensions.get('window').width*0.75}
-        renderNavigationView={() => lotsArray}>
+        drawerWidth={500}
+        renderNavigationView={() => itemsArray}>
           <ImageBackground
             resizeMode={'cover'}
             style={{ width: '100%', height: '100%' }}
@@ -165,4 +168,21 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
     },
+    navigationItemStyle : {
+      marginTop : 10,
+      width: '100%',
+      backgroundColor: 'rgba(255, 255, 255, 0.5)',
+      flexDirection : 'row',
+    },
+    opacityButtonStyle: {
+      height : 50,
+      width : 50,
+      alignItems : 'center'
+    },
+    imageStyle : {
+      marginTop : 7.5,
+      height : 35,
+      width : 35,
+      borderRadius : 25,
+  }
 });
